@@ -3,6 +3,14 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment tar
 set(CMAKE_CXX_STANDARD 17)
 project(CHOWTapeModel VERSION 2.11.4)
 
+# The WCLAP (WebAssembly CLAP) module is a separate Emscripten build of the same
+# processor: configure it on its own with Wclap/scripts/build.sh.
+option(CHOWTAPE_WCLAP "Build the WCLAP module (configure with emcmake)" OFF)
+if(CHOWTAPE_WCLAP)
+    add_subdirectory(Wclap)
+    return()
+endif()
+
 if(IOS)
     option(CHOWTAPE_BUILD_CLAP "Create a CLAP target for ChowTape" OFF)
 else()

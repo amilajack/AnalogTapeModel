@@ -66,9 +66,13 @@ HysteresisSTN::HysteresisSTN()
             }
         };
 
+#if CHOWTAPE_WCLAP // the WCLAP module has no threads
+        loadModelSet (widthLoadIdx++);
+#else
         futures.push_back (std::async (std::launch::async,
                                        [=, &widthLoadIdx]
                                        { loadModelSet (widthLoadIdx++); }));
+#endif
     }
 
     for (auto& f : futures)

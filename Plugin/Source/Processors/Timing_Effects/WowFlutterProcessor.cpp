@@ -1,5 +1,7 @@
 #include "WowFlutterProcessor.h"
+#if ! CHOWTAPE_WCLAP
 #include "../../GUI/Visualizers/LightMeter.h"
+#endif
 
 WowFlutterProcessor::WowFlutterProcessor (AudioProcessorValueTreeState& vts)
 {
@@ -13,6 +15,7 @@ WowFlutterProcessor::WowFlutterProcessor (AudioProcessorValueTreeState& vts)
     flutterOnOff = vts.getRawParameterValue ("flutter_onoff");
 }
 
+#if ! CHOWTAPE_WCLAP
 void WowFlutterProcessor::initialisePlots (foleys::MagicGUIState& magicState)
 {
     wowPlot = magicState.createAndAddObject<LightMeter> ("wow");
@@ -21,6 +24,7 @@ void WowFlutterProcessor::initialisePlots (foleys::MagicGUIState& magicState)
     flutterPlot = magicState.createAndAddObject<LightMeter> ("flutter");
     magicState.addBackgroundProcessing (flutterPlot);
 }
+#endif
 
 void WowFlutterProcessor::createParameterLayout (chowdsp::Parameters& params)
 {
@@ -49,8 +53,10 @@ void WowFlutterProcessor::prepareToPlay (double sampleRate, int samplesPerBlock,
     for (auto& filt : dcBlocker)
         filt.prepare (sampleRate, 15.0f);
 
+#if ! CHOWTAPE_WCLAP
     wowPlot->prepareToPlay (sampleRate, samplesPerBlock);
     flutterPlot->prepareToPlay (sampleRate, samplesPerBlock);
+#endif
 }
 
 void WowFlutterProcessor::processBlock (AudioBuffer<float>& buffer)
@@ -83,8 +89,10 @@ void WowFlutterProcessor::processBlock (AudioBuffer<float>& buffer)
         processBypassed (buffer);
     }
 
+#if ! CHOWTAPE_WCLAP
     wowProcessor.plotBuffer (wowPlot);
     flutterProcessor.plotBuffer (flutterPlot);
+#endif
 }
 
 void WowFlutterProcessor::processWetBuffer (AudioBuffer<float>& buffer)

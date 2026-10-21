@@ -39,6 +39,7 @@ void WowProcess::prepareBlock (float curDepth, float wowFreq, float wowVar, floa
     ohProc.prepareBlock (wowVar, numSamples);
 }
 
+#if ! CHOWTAPE_WCLAP
 void WowProcess::plotBuffer (foleys::MagicPlotSource* plot)
 {
     if (shouldTurnOff())
@@ -47,3 +48,4 @@ void WowProcess::plotBuffer (foleys::MagicPlotSource* plot)
     wowBuffer.applyGain (0.83333f / amp);
     plot->pushSamples (wowBuffer);
 }
+#endif

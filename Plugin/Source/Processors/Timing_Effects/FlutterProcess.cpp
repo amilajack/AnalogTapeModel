@@ -37,6 +37,7 @@ void FlutterProcess::prepareBlock (float curDepth, float flutterFreq, int numSam
     flutterPtrs = flutterBuffer.getArrayOfWritePointers();
 }
 
+#if ! CHOWTAPE_WCLAP
 void FlutterProcess::plotBuffer (foleys::MagicPlotSource* plot)
 {
     if (shouldTurnOff())
@@ -45,3 +46,4 @@ void FlutterProcess::plotBuffer (foleys::MagicPlotSource* plot)
     flutterBuffer.applyGain (1.3333f / amp1);
     plot->pushSamples (flutterBuffer);
 }
+#endif

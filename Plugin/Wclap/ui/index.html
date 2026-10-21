@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- The CHOWTapeModel WCLAP editor: a clap.webview/3 page. scripts/package.py inlines
+     editor.css, editor.js and the assets, so the bundle's page is one file that works
+     from a URL and from a srcdoc frame alike. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHOWTapeModel</title>
+<link rel="stylesheet" href="editor.css">
+</head>
+<body>
+<div id="stage">
+  <div id="editor" aria-busy="true">
+    <header>
+      <div class="title-block">
+        <h1>Chow Tape Model</h1>
+        <div id="info">WCLAP <span class="dim">~ DSP by</span> <b>chowdsp</b></div>
+      </div>
+      <div id="scope-box">
+        <canvas id="scope" width="400" height="88"></canvas>
+        <span id="level-in">IN: -inf dB</span>
+        <span id="level-out">OUT: -inf dB</span>
+      </div>
+    </header>
+    <main id="panels"></main>
+    <div id="tooltip" role="status"></div>
+    <footer>
+      <button class="bar-item" id="oversampling" type="button">Oversampling: <span class="value"></span></button>
+      <label class="bar-item">Hysteresis Mode: <select id="mode" class="value"></select></label>
+      <label class="bar-item">Mix Group: <select id="mix-group" class="value"></select></label>
+      <div id="presets">
+        <button type="button" class="arrow" id="preset-prev" aria-label="Previous preset">&#9664;</button>
+        <button type="button" id="preset-name">Default</button>
+        <button type="button" class="arrow" id="preset-next" aria-label="Next preset">&#9654;</button>
+      </div>
+      <button type="button" id="settings" aria-label="Settings">
+        <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/></svg>
+      </button>
+    </footer>
+    <div id="menu" class="menu" hidden></div>
+    <!-- Not a <form>: hosts sandbox the page without allow-forms, which blocks submission. -->
+    <div id="dialog" role="dialog" aria-labelledby="dialog-label" hidden>
+      <label for="dialog-input" id="dialog-label">Preset name</label>
+      <input id="dialog-input" autocomplete="off" maxlength="64">
+      <div class="dialog-buttons">
+        <button type="button" id="dialog-cancel">Cancel</button>
+        <button type="button" id="dialog-save">Save</button>
+      </div>
+    </div>
+    <div id="message" hidden></div>
+  </div>
+</div>
+<script src="editor.js"></script>
+</body>
+</html>

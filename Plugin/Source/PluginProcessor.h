@@ -10,9 +10,11 @@
 
 #pragma once
 
+#if ! CHOWTAPE_WCLAP // the WCLAP's editor is a webview page (Wclap/ui), not JUCE
 #include "GUI/MyLNF.h"
 #include "GUI/OnOff/OnOffManager.h"
 #include "GUI/Visualizers/TapeScope.h"
+#endif
 #include "MixGroups/MixGroupsController.h"
 #include "Processors/Chew/ChewProcessor.h"
 #include "Processors/Compression/CompressionProcessor.h"
@@ -60,7 +62,9 @@ public:
     const AudioProcessorValueTreeState& getVTS() const { return vts; }
     AudioProcessorValueTreeState& getVTS() { return vts; }
     const AudioPlayHead::CurrentPositionInfo& getPositionInfo() const { return positionInfo; }
+#if ! CHOWTAPE_WCLAP
     auto* getOpenGLHelper() { return openGLHelper.get(); }
+#endif
     auto& getOversampling() { return hysteresis.getOSManager(); }
 
 private:
@@ -86,18 +90,24 @@ private:
     DryWetProcessor dryWet;
     DryDelayType dryDelay { 1 << 21 };
     GainProcessor outGain;
+#if ! CHOWTAPE_WCLAP
     OnOffManager onOffManager;
+#endif
 
     AudioBuffer<float> dryBuffer;
 
+#if ! CHOWTAPE_WCLAP
     foleys::MagicProcessorState magicState { *this, vts };
     TapeScope* scope = nullptr;
 
     MyLNF myLNF;
+#endif
     MixGroupsController mixGroupsController;
     AudioPlayHead::CurrentPositionInfo positionInfo;
 
+#if ! CHOWTAPE_WCLAP
     std::unique_ptr<chowdsp::OpenGLHelper> openGLHelper = nullptr;
+#endif
 
 #if CHOWDSP_AUTO_UPDATE
     AutoUpdater updater;

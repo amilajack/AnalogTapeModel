@@ -28,6 +28,16 @@ cmake -Bbuild -DCMAKE_BUILD_TYPE=Release
 cmake --build build/ --config Release
 ```
 
+## Building the WCLAP (WebAssembly CLAP)
+
+ChowTape also builds as a WCLAP: the CLAP plug-in compiled to WebAssembly, with
+a webview editor. See [Plugin/Wclap/README.md](Plugin/Wclap/README.md).
+
+```bash
+bash Plugin/Wclap/scripts/build.sh
+python3 Plugin/Wclap/scripts/package.py
+```
+
 ## Building for iOS
 
 To build for iOS, you can use the following CMake configuration command:

@@ -41,3 +41,6 @@ bin/*[!.zip]
 *_Packaged
 *.dmg
 *log*
+
+# Toolchains the WCLAP build installs (Plugin/Wclap/scripts/build.sh)
+.toolchains/

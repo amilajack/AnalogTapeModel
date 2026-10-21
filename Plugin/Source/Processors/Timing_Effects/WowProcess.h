@@ -12,7 +12,9 @@ public:
 
     void prepare (double sampleRate, int samplesPerBlock, int numChannels);
     void prepareBlock (float curDepth, float wowFreq, float wowVar, float wowDrift, int numSamples, int numChannels);
+#if ! CHOWTAPE_WCLAP
     void plotBuffer (foleys::MagicPlotSource* plot);
+#endif
 
     inline bool shouldTurnOff() const noexcept { return depthSlew[0].getTargetValue() == depthSlewMin; }
     inline void updatePhase (size_t ch) noexcept { phase[ch] += angleDelta; }

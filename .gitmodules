@@ -13,3 +13,6 @@
 [submodule "Plugin/modules/clap-juce-extensions"]
 	path = Plugin/modules/clap-juce-extensions
 	url = https://github.com/free-audio/clap-juce-extensions
+[submodule "Plugin/modules/clap"]
+	path = Plugin/modules/clap
+	url = https://github.com/free-audio/clap

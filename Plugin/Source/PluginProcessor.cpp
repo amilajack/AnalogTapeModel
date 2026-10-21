@@ -9,6 +9,7 @@
 */
 
 #include "PluginProcessor.h"
+#if ! CHOWTAPE_WCLAP
 #include "GUI/ModulatableSlider.h"
 #include "GUI/OnOff/PowerButton.h"
 #include "GUI/OversamplingMenu.h"
@@ -17,6 +18,7 @@
 #include "GUI/TooltipComp.h"
 #include "GUI/Visualizers/MixGroupViz.h"
 #include "GUI/WowFlutterMenu.h"
+#endif
 #include "Presets/PresetManager.h"
 
 #if JUCE_IOS
@@ -45,7 +47,9 @@ ChowtapeModelAudioProcessor::ChowtapeModelAudioProcessor() : inputFilters (vts),
                                                              chewer (vts),
                                                              lossFilter (vts),
                                                              flutter (vts),
+#if ! CHOWTAPE_WCLAP
                                                              onOffManager (vts, this),
+#endif
                                                              mixGroupsController (vts, this)
 {
     pluginSettings->initialise (settingsFilePath);
@@ -59,10 +63,12 @@ ChowtapeModelAudioProcessor::ChowtapeModelAudioProcessor() : inputFilters (vts),
     positionInfo.bpm = 120.0;
     positionInfo.timeSigNumerator = 4;
 
+#if ! CHOWTAPE_WCLAP
     scope = magicState.createAndAddObject<TapeScope> ("scope");
     flutter.initialisePlots (magicState);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
+#endif
 
     PluginHostType hostType;
     if (hostType.isRenoise()) // Renoise has different gain staging, so we handle that here
@@ -111,15 +117,19 @@ void ChowtapeModelAudioProcessor::prepareToPlay (double sampleRate, int samplesP
     flutter.prepareToPlay (sampleRate, samplesPerBlock, numChannels);
     outGain.prepareToPlay (sampleRate, samplesPerBlock);
 
+#if ! CHOWTAPE_WCLAP
     scope->setNumChannels (numChannels);
     scope->prepareToPlay (sampleRate, samplesPerBlock);
+#endif
 
     dryWet.setDryWet (*vts.getRawParameterValue ("drywet") / 100.0f);
     dryWet.reset();
     dryBuffer.setSize (numChannels, samplesPerBlock);
 
     setLatencySamples (roundToInt (calcLatencySamples()));
+#if ! CHOWTAPE_WCLAP
     magicState.getPropertyAsValue (isStereoTag).setValue (numChannels == 2);
+#endif
 }
 
 void ChowtapeModelAudioProcessor::releaseResources()
@@ -170,7 +180,9 @@ void ChowtapeModelAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
     inGain.processBlock (buffer);
     inputFilters.processBlock (buffer);
 
+#if ! CHOWTAPE_WCLAP
     scope->pushSamplesIO (buffer, TapeScope::AudioType::Input);
+#endif
 
     midSideController.processInput (buffer);
     toneControl.processBlockIn (buffer);
@@ -191,7 +203,9 @@ void ChowtapeModelAudioProcessor::processAudioBlock (AudioBuffer<float>& buffer)
 
     chowdsp::BufferMath::sanitizeBuffer (buffer);
 
+#if ! CHOWTAPE_WCLAP
     scope->pushSamplesIO (buffer, TapeScope::AudioType::Output);
+#endif
 }
 
 void ChowtapeModelAudioProcessor::latencyCompensation()
@@ -221,6 +235,9 @@ void ChowtapeModelAudioProcessor::latencyCompensation()
 
 AudioProcessorEditor* ChowtapeModelAudioProcessor::createEditor()
 {
+#if CHOWTAPE_WCLAP
+    return nullptr; // the WCLAP's editor is its clap.webview page
+#else
     if (openGLHelper == nullptr)
         openGLHelper = std::make_unique<chowdsp::OpenGLHelper>();
 
@@ -285,6 +302,7 @@ AudioProcessorEditor* ChowtapeModelAudioProcessor::createEditor()
     openGLHelper->setComponent (editor);
 
     return editor;
+#endif
 }
 
 void ChowtapeModelAudioProcessor::getStateInformation (MemoryBlock& destData)

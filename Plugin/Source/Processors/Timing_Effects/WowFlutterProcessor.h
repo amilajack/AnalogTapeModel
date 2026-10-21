@@ -11,7 +11,9 @@ class WowFlutterProcessor
 public:
     WowFlutterProcessor (AudioProcessorValueTreeState& vts);
 
+#if ! CHOWTAPE_WCLAP
     void initialisePlots (foleys::MagicGUIState& magicState);
+#endif
     static void createParameterLayout (chowdsp::Parameters& params);
 
     void prepareToPlay (double sampleRate, int samplesPerBlock, int numChannels);
@@ -34,7 +36,9 @@ private:
 
     WowProcess wowProcessor;
     FlutterProcess flutterProcessor;
+#if ! CHOWTAPE_WCLAP
     foleys::MagicPlotSource *wowPlot = nullptr, *flutterPlot = nullptr;
+#endif
 
     enum
     {
